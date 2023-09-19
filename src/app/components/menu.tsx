@@ -15,8 +15,8 @@ const Menu = () => {
       return null; 
     }
   return (
-    <nav className="bg-blue-500 p-4">
-      <div className="container mx-auto flex justify-between items-center">
+    <nav className="bg-black p-4">
+      <div className="container mx-auto flex justify-between items-center text-white">
         <div>
           <Link href="/">
             Inicio
@@ -25,7 +25,7 @@ const Menu = () => {
         <ul className="flex space-x-4">
         <li>
             <Link href="pages/login">
-              Iniciar Sesion
+              Iniciar Sesión
             </Link>
           </li>
           <li>
@@ -34,7 +34,7 @@ const Menu = () => {
             </Link>
           </li>
           <li>
-            <Link href="pages/contact">
+            <Link href="pages/contact" >
               Contacto
             </Link>
           </li>
