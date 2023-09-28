@@ -28,16 +28,16 @@ export default function Home() {
               className="w-full h-40 object-cover mb-4 rounded-lg"
             />
             <h2 className="text-xl font-semibold text-white mb-2">{mascota.name}</h2>
-            <p className="text-sm text-gray-500">Especie: {mascota.species}</p>
-            <p className="text-sm text-gray-500">Edad: {mascota.age}</p>
-            <p className="text-sm text-gray-500">Color: {mascota.color}</p>
-            <p className="text-sm text-gray-500">Sexo: {mascota.sex}</p>
-            <p className="text-sm text-gray-500">Tamaño: {mascota.size}</p>
-            <p className="text-sm text-gray-500">Estado: {mascota.estate}</p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-black-500">Especie: {mascota.species}</p>
+            <p className="text-sm text-black-500">Edad: {mascota.age}</p>
+            <p className="text-sm text-black-500">Color: {mascota.color}</p>
+            <p className="text-sm text-black-500">Sexo: {mascota.sex}</p>
+            <p className="text-sm text-black-500">Tamaño: {mascota.size}</p>
+            <p className="text-sm text-black-500">Estado: {mascota.estate}</p>
+            <p className="text-sm text-black-500">
               Enfermedades: {mascota.diseases.join(', ')}
             </p>
-            <p className="text-sm text-gray-500">Esterilizado: {mascota.sterilized}</p>
+            <p className="text-sm text-black-500">Esterilizado: {mascota.sterilized}</p>
           </div>
         ))}
       </div>

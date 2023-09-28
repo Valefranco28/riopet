@@ -297,10 +297,7 @@ function PetForm() {
         <Select
           id="diseases"
           name="diseases"
-          value={formData.diseases.map(option => ({
-            label: option,
-            value: option,
-          }))}
+          value={formData.diseases}
           onChange={handleDiseasesChange}
           isMulti // Permite múltiples selecciones
          options={[
@@ -323,18 +320,6 @@ function PetForm() {
       type="button"
     >
       Guardar
-    </button>
-    <button
-      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
-      type="button"
-    >
-      Actualizar
-    </button>
-    <button
-      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-      type="button"
-    >
-      Eliminar
     </button>
   </div>
      </form>
