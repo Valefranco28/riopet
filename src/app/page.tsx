@@ -1,78 +1,46 @@
-import Image from 'next/image'
+'use client'
+import { useEffect, useState } from 'react';
 
 export default function Home() {
+  const [mascotas, setMascotas] = useState([]);
+
+  useEffect(() => {
+    // Realiza una solicitud GET a la API para obtener la lista de mascotas
+    fetch('http://localhost:3000/pet')
+      .then((response) => response.json())
+      .then((data) => setMascotas(data))
+      .catch((error) => console.error('Error al obtener la lista de mascotas', error));
+  }, []);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
+    <main className="min-h-screen bg-gray-100 py-12 px-4">
+      <div className="container mx-auto grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       <link rel="icon" href="/images/logoRiopet.ico" />
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+        {/* Mapea las mascotas y crea una card para cada una */}
+        {mascotas.map((mascota: any) => (
+          <div
+            key={mascota.id} // Asegúrate de usar un valor único como clave
+            className="bg-red-700 rounded-lg shadow-md p-6 hover:shadow-lg transition-transform hover:scale-105"
+          >
+            <img
+              src={mascota.image}
+              alt={mascota.name}
+              className="w-full h-40 object-cover mb-4 rounded-lg"
+            />
+            <h2 className="text-xl font-semibold text-white mb-2">{mascota.name}</h2>
+            <p className="text-sm text-gray-500">Especie: {mascota.species}</p>
+            <p className="text-sm text-gray-500">Edad: {mascota.age}</p>
+            <p className="text-sm text-gray-500">Color: {mascota.color}</p>
+            <p className="text-sm text-gray-500">Sexo: {mascota.sex}</p>
+            <p className="text-sm text-gray-500">Tamaño: {mascota.size}</p>
+            <p className="text-sm text-gray-500">Estado: {mascota.estate}</p>
+            <p className="text-sm text-gray-500">
+              Enfermedades: {mascota.diseases.join(', ')}
+            </p>
+            <p className="text-sm text-gray-500">Esterilizado: {mascota.sterilized}</p>
+          </div>
+        ))}
       </div>
     </main>
-  )
+  );
 }

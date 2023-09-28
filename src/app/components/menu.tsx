@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import ImageSlider from "../components/imageSlider";
+
 
 const Menu = () => {
     const [isClient, setIsClient] = useState(false);
@@ -16,20 +16,6 @@ const Menu = () => {
       return null; 
     }
 
-    const Home = () => {
-      const images = [
-        "/images/adopcion.jpg",
-        "/images/slider.jpg",
-        "/images/slider2.jpg",
-      ];
-    
-      return (
-        <div>
-          <h1>Slider de Imágenes</h1>
-          <ImageSlider images={images} />
-        </div>
-      );
-    };
 
   return (
     <nav className="bg-black p-4">
@@ -48,12 +34,12 @@ const Menu = () => {
           </li>
           <li>
             <Link href="/about">
-              Acerca de
+              Acerca de 
             </Link>
           </li>
           <li>
-            <Link href="/pet" >
-              Contacto
+            <Link href="/appointment" >
+              Agendar
             </Link>
           </li>
         </ul>
