@@ -2,20 +2,26 @@
  import { useState } from "react";
  import  { auth, signInWithEmailAndPassword } from '../firebase'
  import { useRouter } from 'next/navigation'
+ import {
+  setPersistence,
+  browserSessionPersistence,
+  browserLocalPersistence, // Puedes importar el tipo de persistencia que desees utilizar
+} from 'firebase/auth';
+ 
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const router = useRouter()
+  const router = useRouter();
   
 
   const handleLogin = async (e:any) => {
     e.preventDefault();
 
     try {
+     await setPersistence(auth, browserLocalPersistence);
      const autenticacion =  await signInWithEmailAndPassword(auth, email, password);
      const idToken = await autenticacion.user.getIdToken();
-     console.log('autenticacion', autenticacion);
      sessionStorage.setItem('idToken', idToken);
      router.push('/about', { scroll: false });
       // El usuario ha iniciado sesión con éxito

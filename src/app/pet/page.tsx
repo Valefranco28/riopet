@@ -1,23 +1,41 @@
 'use client'
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Select from 'react-select';
 
 function PetForm() {
+
+  const idToken =  window.sessionStorage.getItem('idToken');
+  let params = useSearchParams();
+  const type = params.get('type');
+  let petUpdateObject = window.sessionStorage.getItem('pet');
+  window.sessionStorage.setItem('pet', JSON.stringify(null));
+  let newUpdateObject;
+
+  if (petUpdateObject) {
+    newUpdateObject = JSON.parse(petUpdateObject);
+  }
+
+  console.log('type', type)
+
   const [formData, setFormData] = useState({
-    name: '',
-    species: '',
-    age: 0,
-    color: '',
-    sex: '',
-    size: '',
-    estate: '',
-    diseases: [] as string[],
-    monthyear:'',
-    Sterilized: '',
-    image: '',
+    name: newUpdateObject?.name || '',
+    species: newUpdateObject?.species || '',
+    age: newUpdateObject?.age || '',
+    color: newUpdateObject?.color || '',
+    sex: newUpdateObject?.sex || '',
+    size: newUpdateObject?.size || '',
+    estate: newUpdateObject?.estate || '',
+    diseases: newUpdateObject?.diseases || [] as string[],
+    monthyear: newUpdateObject?.monthyear || '',
+    Sterilized: newUpdateObject?.Sterilized || '',
+    image: newUpdateObject?.image || '',
+    doc: newUpdateObject?.doc || '',
   });
+  
 
   const handleChange = (e: any) => {
     const { name, value, type, checked } = e.target;
@@ -38,13 +56,13 @@ function PetForm() {
   const [birthDate, setBirthDate] = useState(null);
 
   const handleSubmit = async (e: any) => {
+   
     e.preventDefault();
-     // Aquí puedes enviar los datos del formulario, incluida la imagen, a tu servidor o hacer el procesamiento necesario
-    console.log(formData);
-    formData.age = Number(formData.age);
-    try {
+
+    if(type){
+      try {
         const response = await fetch('http://localhost:3000/pet', {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -54,6 +72,25 @@ function PetForm() {
     } catch (error) {
         console.error('error guardando mascota', error)
     }
+    } else {
+    // Aquí puedes enviar los datos del formulario, incluida la imagen, a tu servidor o hacer el procesamiento necesario
+    //formData.age = Number(formData.age);
+    try {
+        const response = await fetch('http://localhost:3000/pet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`,
+          
+        },
+        body: JSON.stringify(formData),
+      });
+      console.log('se guardo mascota correctamente', response)
+    } catch (error) {
+        console.error('error guardando mascota', error)
+    }
+    }
+     
   };
   
   const [formImage, setFormImage] = useState({
@@ -84,9 +121,24 @@ function PetForm() {
 
   
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="flex items-center justify-center"></div>
+    
+    <div className="min-h-screen flex flex-col items-center  bg-gray-100">
+    
+    <div className="mb-12 flex flex-row items-end bg-black"> {/* Contenedor flex */}
+          <ul className="flex space-x-4  "> {/* Contenedor flex */}
+            <li className="h-12 bg-black ">
+              <Link className="text-white" href="/pet">Crear mascota</Link>
+            </li>
+            <li className="h-12 bg-black ">
+              <Link className="text-white" href="/pets">Lista Mascota</Link>
+            </li>
+            <li className="h-12 bg-black ">
+              <Link className="text-white" href="/pet">Agendamiento</Link>
+            </li>
+          </ul>
+        </div>
     <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      
       <h2 className="text-2xl font-bold mb-4 text-center">Datos de la Mascota</h2>
       <div className="mb-4">
       <div className="flex space-x-4">
@@ -110,7 +162,7 @@ function PetForm() {
         Edad:
       </label>
         <input
-        type="number"
+        type="text"
         id="age"
         name="age"
         value={formData.age}
