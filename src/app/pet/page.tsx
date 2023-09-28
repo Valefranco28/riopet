@@ -2,7 +2,6 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Select from 'react-select';
 
@@ -26,13 +25,14 @@ function PetForm() {
     species: newUpdateObject?.species || '',
     age: newUpdateObject?.age || '',
     color: newUpdateObject?.color || '',
-    sex: newUpdateObject?.sex || '',
+    gender: newUpdateObject?.gender || '',
     size: newUpdateObject?.size || '',
     estate: newUpdateObject?.estate || '',
     diseases: newUpdateObject?.diseases || [] as string[],
-    monthyear: newUpdateObject?.monthyear || '',
-    Sterilized: newUpdateObject?.Sterilized || '',
+    sterilized: newUpdateObject?.sterilized || '',
     image: newUpdateObject?.image || '',
+    monthyear: newUpdateObject?.monthyear || '',
+    date: newUpdateObject?.date || '',
     doc: newUpdateObject?.doc || '',
   });
   
@@ -53,8 +53,6 @@ function PetForm() {
     setFormData({ ...formData, diseases: selectedDiseases });
   };
   
-  const [birthDate, setBirthDate] = useState(null);
-
   const handleSubmit = async (e: any) => {
    
     e.preventDefault();
@@ -142,7 +140,7 @@ function PetForm() {
       <h2 className="text-2xl font-bold mb-4 text-center">Datos de la Mascota</h2>
       <div className="mb-4">
       <div className="flex space-x-4">
-      <div className="w-1/2">
+      <div className="w-custom">
       <label htmlFor="image" className="block text-gray-700 font-bold mb-2">
          Imagen de la Mascota:
        </label>
@@ -156,45 +154,7 @@ function PetForm() {
          required
         />
       </div>
-      <div className="flex space-x-4">
-      <div className="w-1/2">
-        <label htmlFor="age" className="block text-gray-700 font-bold mb-2">
-        Edad:
-      </label>
-        <input
-        type="text"
-        id="age"
-        name="age"
-        value={formData.age}
-        onChange={handleChange}
-        className="w-40 px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-        required
-      />
-      </div>
-     <div className="">
-       <label htmlFor="monthyear" className="block text-gray-700 font-bold mb-2">
-        Mes/Año:
-       </label>
-        <select
-         id="monthyear"
-         name="monthyear"
-         value={formData.monthyear}
-         onChange={handleChange}
-         className="w-42 px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-         required
-         >
-         <option value="">Selecciona una opción</option>
-         <option value="mes">Meses</option>
-         <option value="año">Años</option>
-         </select>
-      </div>
-      </div>
-      </div>
-      </div>
-      
-      <div className="mb-4">
-      <div className="flex space-x-4"> 
-      <div className="w-1/2">
+      <div className="w-custom">
       <label htmlFor="name" className="block text-gray-700 font-bold mb-2">
           Nombre:
         </label>
@@ -207,48 +167,75 @@ function PetForm() {
           className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
           required/>
       </div>
-      <div className="w-1/2">
-  <label htmlFor="birthDate" className="block text-gray-700 font-bold mb-2">
-    Fecha de Nacimiento:
+      </div>
+      </div>
+      
+      <div className="mb-4">
+      <div className="flex space-x-4"> 
+      <div className="w-custom">
+        <label htmlFor="age" className="block text-gray-700 font-bold mb-2">
+        Edad:
+      </label>
+        <input
+        type="number"
+        id="age"
+        name="age"
+        value={formData.age}
+        onChange={handleChange}
+        className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+        required
+      />
+      </div>
+      <div className="w-custom">
+       <label htmlFor="monthyear" className="block text-gray-700 font-bold mb-2">
+        Mes/Año:
+       </label>
+        <select
+         id="monthyear"
+         name="monthyear"
+         value={formData.monthyear}
+         onChange={handleChange}
+         className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+         required
+         >
+         <option value="">Selecciona una opción</option>
+         <option value="mes">Meses</option>
+         <option value="año">Años</option>
+         </select>
+      </div>
+      <div className="w-custom">
+  <label htmlFor="date" className="block text-gray-700 font-medium mb-2">
+    Fecha
   </label>
-  <DatePicker
-    id="birthDate"
-    selected={birthDate}
-    onChange={(date) => setBirthDate(date)}
-    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+  <input
+    type="date"
+    id="date"
+    name="date"
+    value={formData.date}
+    onChange={handleChange}
+    className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
+    style={{
+      /* Estilos CSS para hacer que el input se parezca más al DatePicker */
+      lineHeight: '1.5', // Espaciado entre líneas
+      borderRadius: '0.25rem', // Bordes redondeados
+      paddingLeft: '0.75rem', // Espaciado izquierdo
+    }}
     required
   />
 </div>
-<div className="w-1/2">
-        <label htmlFor="species" className="block text-gray-700 font-bold mb-2">
-          Especie:
-        </label>
-        <select
-          id="species"
-          name="species"
-          value={formData.species}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-          required
-        >
-          <option value="">Selecciona una opción</option>
-          <option value="perro">Perro</option>
-          <option value="gato">Gato</option>
-        </select>
-         </div>
          </div>
       </div>
       
       <div className="mb-4">
       <div className="flex space-x-4"> 
-      <div className="w-1/2">
-      <label htmlFor="sex" className="block text-gray-700 font-bold mb-2">
+      <div className="w-custom">
+      <label htmlFor="gender" className="block text-gray-700 font-bold mb-2">
           Sexo:
         </label>
         <select
-          id="sex"
-          name="sex"
-          value={formData.sex}
+          id="gender"
+          name="gender"
+          value={formData.gender}
           onChange={handleChange}
           className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
           required
@@ -258,7 +245,7 @@ function PetForm() {
           <option value="macho">Macho</option>
         </select>
       </div>
-          <div className="w-1/2">
+          <div className="w-custom">
           <label htmlFor="estate" className="block text-gray-700 font-bold mb-2">
           Estado:
         </label>
@@ -275,7 +262,7 @@ function PetForm() {
           <option value="adoptado">Adoptado</option>
         </select>
       </div>
-      <div className="w-1/2">
+      <div className="w-custom">
           <label htmlFor="size" className="block text-gray-700 font-bold mb-2">
           Tamaño:
         </label>
@@ -298,14 +285,14 @@ function PetForm() {
       
       <div className="mb-4">
       <div className="flex space-x-4"> 
-      <div className="w-1/2">
-      <label htmlFor="Sterilized" className="block text-gray-700 font-bold mb-2">
+      <div className="w-custom">
+      <label htmlFor="sterilized" className="block text-gray-700 font-bold mb-2">
           Esterilizado:
         </label>
         <select
-          id="Sterilized"
-          name="Sterilized"
-          value={formData.Sterilized}
+          id="sterilized"
+          name="sterilized"
+          value={formData.sterilized}
           onChange={handleChange}
           className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
           required
@@ -315,26 +302,7 @@ function PetForm() {
           <option value="no">No</option>
         </select>
       </div>
-      <div className="w-1/2">
-        <label htmlFor="diseases" className="block text-gray-700 font-bold mb-2">
-          Enfermedades:
-        </label>
-        <Select
-          id="diseases"
-          name="diseases"
-          value={formData.diseases}
-          onChange={handleDiseasesChange}
-          isMulti // Permite múltiples selecciones
-          options={[
-            { label: 'Moquillo', value: 'moquillo' },
-            { label: 'Dermatitis', value: 'dermatitis' },
-            { label: 'La rabia', value: 'rabia' },
-            { label: 'Toxocariasis', value: 'Toxocariasis' },
-            { label: 'Ninguna', value: 'ninguna' },
-          ]}
-        />
-      </div>
-      <div className="w-1/2">
+      <div className="w-custom">
         <label htmlFor="color" className="block text-gray-700 font-bold mb-2">
           Color:
         </label>
@@ -353,20 +321,74 @@ function PetForm() {
           <option value="otro">Otro</option>
         </select>
          </div>
+         <div className="w-custom">
+        <label htmlFor="species" className="block text-gray-700 font-bold mb-2">
+          Especie:
+        </label>
+        <select
+          id="species"
+          name="species"
+          value={formData.species}
+          onChange={handleChange}
+          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+          required
+        >
+          <option value="">Selecciona una opción</option>
+          <option value="perro">Perro</option>
+          <option value="gato">Gato</option>
+        </select>
+         </div>
       </div>
-        
+      </div>
+      <div className="mb-4">
+      <div className="flex space-x-4"> 
+      <div className="w-55">
+        <label htmlFor="diseases" className="block text-gray-700 font-bold mb-2">
+          Enfermedades:
+        </label>
+        <Select
+          id="diseases"
+          name="diseases"
+          value={formData.diseases.map((option:any) => ({
+            label: option,
+            value: option,
+          }))}
+          onChange={handleDiseasesChange}
+          isMulti // Permite múltiples selecciones
+         options={[
+          { label: 'Moquillo', value: 'moquillo' },
+          { label: 'Dermatitis', value: 'dermatitis' },
+          { label: 'La rabia', value: 'rabia' },
+          { label: 'Toxocariasis', value: 'Toxocariasis' },
+          { label: 'Ninguna', value: 'ninguna' },
+        ]}
+        />
+      </div>
+      </div>
       </div>
       
       {/* Agrega campos para especie, edad, sexo, tamaño, etc., de manera similar */}
       
-      <div className="mb-6 text-center">
-        <button
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          type="submit"
-        >
-          Enviar
-        </button>
-      </div>
+      <div className="flex justify-center mt-2">
+  <button
+      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
+      type="button"
+    >
+      Guardar
+    </button>
+    <button
+      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
+      type="button"
+    >
+      Actualizar
+    </button>
+    <button
+      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      type="button"
+    >
+      Eliminar
+    </button>
+  </div>
      </form>
     </div>
       
