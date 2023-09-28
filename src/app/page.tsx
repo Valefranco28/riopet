@@ -62,7 +62,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex  min-h-screen flex-col items-center justify-between" >
+    <main className="flex   flex-col items-center justify-between" >
       {isAdmin && (
         <div className="mb-12 flex flex-row items-end bg-black"> {/* Contenedor flex */}
           <ul className="flex space-x-4  "> {/* Contenedor flex */}
@@ -78,7 +78,12 @@ export default function Home() {
           </ul>
         </div>
       )}
-      <div className="mb-32 grid grid-cols-1 lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-3">
+      {!isAdmin && (
+        <div className="bg-gray-100 h-12">
+
+        </div>
+      )}
+      <div className="container mx-auto grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       <link rel="icon" href="/images/logoRiopet.ico" />
         {/* Mapea las mascotas y crea una card para cada una */}
         {mascotas.map((mascota: any) => (
@@ -99,7 +104,7 @@ export default function Home() {
             <p className="text-sm text-gray-500">Tamaño: {mascota.size}</p>
             <p className="text-sm text-gray-500">Estado: {mascota.estate}</p>
             <p className="text-sm text-gray-500">
-              Enfermedades: {mascota.diseases.join(', ')}
+              Enfermedades: {mascota.diseases}
             </p>
             <p className="text-sm text-gray-500">Esterilizado: {mascota.sterilized}</p>
           </div>

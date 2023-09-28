@@ -105,7 +105,7 @@ const MascotasPage = () => {
               <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.sex}</td>
               <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.size}</td>
               <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.estate}</td>
-              <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.diseases.join(', ')}</td>
+              <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.diseases}</td>
               <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.Sterilized}</td>
               <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                 <img src={mascota.image} alt={mascota.name}  />

@@ -5,6 +5,12 @@ import React, { ChangeEvent, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import Select from 'react-select';
 
+export interface disease {
+  label: string,
+  value: string
+}
+
+
 function PetForm() {
 
   const idToken =  window.sessionStorage.getItem('idToken');
@@ -13,6 +19,7 @@ function PetForm() {
   let petUpdateObject = window.sessionStorage.getItem('pet');
   window.sessionStorage.setItem('pet', JSON.stringify(null));
   let newUpdateObject;
+  let file: any;
 
   if (petUpdateObject) {
     newUpdateObject = JSON.parse(petUpdateObject);
@@ -20,7 +27,7 @@ function PetForm() {
 
   console.log('type', type)
 
-  const [formData, setFormData] = useState({
+  const [formDataPet, setFormData] = useState({
     name: newUpdateObject?.name || '',
     species: newUpdateObject?.species || '',
     age: newUpdateObject?.age || '',
@@ -28,9 +35,9 @@ function PetForm() {
     gender: newUpdateObject?.gender || '',
     size: newUpdateObject?.size || '',
     estate: newUpdateObject?.estate || '',
-    diseases: newUpdateObject?.diseases || [] as string[],
+    diseases: newUpdateObject?.diseases || [] as disease[],
     sterilized: newUpdateObject?.sterilized || '',
-    image: newUpdateObject?.image || '',
+    image: newUpdateObject?.image || null,
     monthyear: newUpdateObject?.monthyear || '',
     date: newUpdateObject?.date || '',
     doc: newUpdateObject?.doc || '',
@@ -40,7 +47,7 @@ function PetForm() {
   const handleChange = (e: any) => {
     const { name, value, type, checked } = e.target;
     setFormData({
-      ...formData,
+      ...formDataPet,
       [name]: type === 'checkbox' ? checked : value,
     });
   };
@@ -50,7 +57,7 @@ function PetForm() {
       label: option.label,
       value: option.value,
     }));
-    setFormData({ ...formData, diseases: selectedDiseases });
+    setFormData({ ...formDataPet, diseases: selectedDiseases });
   };
   
   const handleSubmit = async (e: any) => {
@@ -64,7 +71,7 @@ function PetForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formDataPet),
       });
       console.log('se guardo mascota correctamente', response)
     } catch (error) {
@@ -74,14 +81,30 @@ function PetForm() {
     // Aquí puedes enviar los datos del formulario, incluida la imagen, a tu servidor o hacer el procesamiento necesario
     //formData.age = Number(formData.age);
     try {
+        const diseasesJson = JSON.stringify(formDataPet.diseases);
+        const formData = new FormData();
+        formData.append('name', formDataPet.name);
+        formData.append('species', formDataPet.species);
+        formData.append('age', formDataPet.age);
+        formData.append('color', formDataPet.color);
+        formData.append('gender', formDataPet.gender);
+        formData.append('size', formDataPet.size);
+        formData.append('estate', formDataPet.estate);
+        formData.append('diseases', diseasesJson);
+        formData.append('sterilized', formDataPet.sterilized);
+        formData.append('image', formDataPet.image);
+        formData.append('monthyear', formDataPet.monthyear);
+        formData.append('date', formDataPet.date);
+        formData.append('doc', formDataPet.doc);
+
+
         const response = await fetch('http://localhost:3000/pet', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `Bearer ${idToken}`,
           
         },
-        body: JSON.stringify(formData),
+        body: formData,
       });
       console.log('se guardo mascota correctamente', response)
     } catch (error) {
@@ -91,23 +114,22 @@ function PetForm() {
      
   };
   
-  const [formImage, setFormImage] = useState({
-    // ...otros campos del formulario
-    image: null, // Nuevo campo para la imagen
-  });
+
 
   const handleImageChange = (e: any) => {
-    const file = e.target.files[0]; // Obtén el archivo seleccionado (puedes permitir múltiples archivos si es necesario)
-    setFormImage({
-      ...formImage,
+    file = e.target.files[0]; // Obtén el archivo seleccionado (puedes permitir múltiples archivos si es necesario)
+    console.log('image 1', file)
+    setFormData({
+      ...formDataPet,
       image: file, // Almacena el archivo en el estado del formulario
     });
+    setFormData((prevData) => ({ ...prevData, image: file }));
   };
 
-  {formImage.image && (
+  {formDataPet.image && (
     <div className="mb-4">
       <label>Imagen de la Mascota:</label>
-      <img src={URL.createObjectURL(formImage.image)} alt="Imagen de la mascota" />
+      <img src={URL.createObjectURL(formDataPet.image)} alt="Imagen de la mascota" />
     </div>
   )};
 
@@ -162,7 +184,7 @@ function PetForm() {
           type="text"
           id="name"
           name="name"
-          value={formData.name}
+          value={formDataPet.name}
           onChange={handleChange}
           className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
           required/>
@@ -180,7 +202,7 @@ function PetForm() {
         type="number"
         id="age"
         name="age"
-        value={formData.age}
+        value={formDataPet.age}
         onChange={handleChange}
         className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
         required
@@ -193,7 +215,7 @@ function PetForm() {
         <select
          id="monthyear"
          name="monthyear"
-         value={formData.monthyear}
+         value={formDataPet.monthyear}
          onChange={handleChange}
          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
          required
@@ -211,7 +233,7 @@ function PetForm() {
     type="date"
     id="date"
     name="date"
-    value={formData.date}
+    value={formDataPet.date}
     onChange={handleChange}
     className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
     style={{
@@ -235,7 +257,7 @@ function PetForm() {
         <select
           id="gender"
           name="gender"
-          value={formData.gender}
+          value={formDataPet.gender}
           onChange={handleChange}
           className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
           required
@@ -252,7 +274,7 @@ function PetForm() {
         <select
           id="estate"
           name="estate"
-          value={formData.estate}
+          value={formDataPet.estate}
           onChange={handleChange}
           className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
           required
@@ -269,7 +291,7 @@ function PetForm() {
         <select
           id="size"
           name="size"
-          value={formData.size}
+          value={formDataPet.size}
           onChange={handleChange}
           className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
           required
@@ -292,7 +314,7 @@ function PetForm() {
         <select
           id="sterilized"
           name="sterilized"
-          value={formData.sterilized}
+          value={formDataPet.sterilized}
           onChange={handleChange}
           className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
           required
@@ -309,7 +331,7 @@ function PetForm() {
         <select
           id="color"
           name="color"
-          value={formData.color}
+          value={formDataPet.color}
           onChange={handleChange}
           className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
           required
@@ -328,7 +350,7 @@ function PetForm() {
         <select
           id="species"
           name="species"
-          value={formData.species}
+          value={formDataPet.species}
           onChange={handleChange}
           className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
           required
@@ -349,10 +371,7 @@ function PetForm() {
         <Select
           id="diseases"
           name="diseases"
-          value={formData.diseases.map((option:any) => ({
-            label: option,
-            value: option,
-          }))}
+          value={formDataPet.diseases}
           onChange={handleDiseasesChange}
           isMulti // Permite múltiples selecciones
          options={[
@@ -372,21 +391,9 @@ function PetForm() {
       <div className="flex justify-center mt-2">
   <button
       className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
-      type="button"
+      type="submit"
     >
       Guardar
-    </button>
-    <button
-      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
-      type="button"
-    >
-      Actualizar
-    </button>
-    <button
-      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-      type="button"
-    >
-      Eliminar
     </button>
   </div>
      </form>
