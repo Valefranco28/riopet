@@ -126,12 +126,12 @@ function PetForm() {
     setFormData((prevData) => ({ ...prevData, image: file }));
   };
 
-  {formDataPet.image && (
-    <div className="mb-4">
-      <label>Imagen de la Mascota:</label>
-      <img src={URL.createObjectURL(formDataPet.image)} alt="Imagen de la mascota" />
-    </div>
-  )};
+  //{formDataPet.image && (
+  //  <div className="mb-4">
+  //   <label>Imagen de la Mascota:</label>
+  //   <img src={URL.createObjectURL(formDataPet.image)} alt="Imagen de la mascota" />
+  //  </div>
+  //)};
 
   const [selectedValue, setSelectedValue] = useState(''); // Estado para almacenar el valor seleccionado
 
@@ -210,7 +210,7 @@ function PetForm() {
       </div>
       <div className="w-custom">
        <label htmlFor="monthyear" className="block text-gray-700 font-bold mb-2">
-        Mes/Año:
+        Meses/Años:
        </label>
         <select
          id="monthyear"

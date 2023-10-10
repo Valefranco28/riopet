@@ -85,6 +85,8 @@ const MascotasPage = () => {
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Especie</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Edad</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Meses/Años</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha de nacimiento</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Color</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sexo</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tamaño</th>
@@ -101,12 +103,14 @@ const MascotasPage = () => {
               <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.name}</td>
               <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.species}</td>
               <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.age}</td>
+              <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.monthyear}</td>
+              <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.date}</td>
               <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.color}</td>
-              <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.sex}</td>
+              <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.gender}</td>
               <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.size}</td>
               <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.estate}</td>
               <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.diseases}</td>
-              <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.Sterilized}</td>
+              <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{mascota.sterilized}</td>
               <td className="px-3 py-2 sm:px-6 sm:py-4 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                 <img src={mascota.image} alt={mascota.name}  />
               </td>

@@ -73,7 +73,7 @@ export default function Home() {
               <Link className="text-white" href="/pets">Lista Mascota</Link>
             </li>
             <li className="h-12 bg-black ">
-              <Link className="text-white" href="/pet">Agendamiento</Link>
+              <Link className="text-white" href="/appointments">Agendamiento</Link>
             </li>
           </ul>
         </div>
@@ -99,12 +99,14 @@ export default function Home() {
             <h2 className="text-xl font-semibold text-white mb-2">{mascota.name}</h2>
             <p className="text-sm text-black-500">Especie: {mascota.species}</p>
             <p className="text-sm text-black-500">Edad: {mascota.age}</p>
+            <p className="text-sm text-black-500">Meses/Años: {mascota.monthyear}</p>
+            <p className="text-sm text-black-500">Fecha de nacimiento: {mascota.date}</p>
             <p className="text-sm text-black-500">Color: {mascota.color}</p>
             <p className="text-sm text-black-500">Sexo: {mascota.sex}</p>
             <p className="text-sm text-black-500">Tamaño: {mascota.size}</p>
             <p className="text-sm text-black-500">Estado: {mascota.estate}</p>
             <p className="text-sm text-black-500">
-              Enfermedades: {mascota.diseases.join(', ')}
+              Enfermedades: {mascota.diseases}
             </p>
             <p className="text-sm text-black-500">Esterilizado: {mascota.sterilized}</p>
           </div>

@@ -1,68 +1,84 @@
 'use client'
+import { useSearchParams } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 
 
 function AppointmentForm() {
-  const [formData, setFormData] = useState({
-    name: '',
-    lastname: '',
-    email: '',
-    date: '',
-    time: '',
-    reason: '',
+
+  const idToken =  window.sessionStorage.getItem('idToken');
+  let params = useSearchParams();
+  const type = params.get('type');
+  let agendaUpdateObject = window.sessionStorage.getItem('agenda');
+  window.sessionStorage.setItem('pet', JSON.stringify(null));
+  let newUpdateObject;
+  let file: any;
+
+  if (agendaUpdateObject) {
+    newUpdateObject = JSON.parse(agendaUpdateObject);
+  }
+
+  console.log('type', type)
+
+  const [formDataAppointment, setFormData] = useState({
+    name: newUpdateObject?.name || '',
+    lastname: newUpdateObject?.lastname || '',
+    email: newUpdateObject?.email || '',
+    date: newUpdateObject?.date || '',
+    time: newUpdateObject?.time || '',
+    reason: newUpdateObject?.reason || '',
   });
 
   const handleChange = (e: any) => {
     const { name, value, type, checked } = e.target;
     setFormData({
-      ...formData,
+      ...formDataAppointment,
       [name]: type === 'checkbox' ? checked : value,
     });
   };
 
   const handleSubmit = async (e: any) => {
+   
     e.preventDefault();
-     // Aquí puedes enviar los datos del formulario, incluida la imagen, a tu servidor o hacer el procesamiento necesario
-    console.log(formData);
-    try {
-        const response = await fetch('http://localhost:3000/pet', {
-        method: 'POST',
+
+    if(type){
+      try {
+        const response = await fetch('http://localhost:3000/appointment', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formDataAppointment),
       });
-      console.log('se guardo mascota correctamente', response)
+      console.log('se guardo cita correctamente', response)
     } catch (error) {
-        console.error('error guardando mascota', error)
+        console.error('error guardando cita', error)
     }
+    } else {
+    // Aquí puedes enviar los datos del formulario, incluida la imagen, a tu servidor o hacer el procesamiento necesario
+    //formData.age = Number(formData.age);
+    try {
+        
+        const response = await fetch('http://localhost:3000/appointment', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${idToken}`,
+          'Content-Type': 'application/json',
+          
+        },
+        body: JSON.stringify(formDataAppointment),
+      });
+      console.log('se guardo cita correctamente', response)
+    } catch (error) {
+        console.error('error guardando cita', error)
+    }
+    }
+     
   };
   
-  const [formImage, setFormImage] = useState({
-    // ...otros campos del formulario
-    image: null, // Nuevo campo para la imagen
-  });
-
-  const handleImageChange = (e: any) => {
-    const file = e.target.files[0]; // Obtén el archivo seleccionado (puedes permitir múltiples archivos si es necesario)
-    setFormImage({
-      ...formImage,
-      image: file, // Almacena el archivo en el estado del formulario
-    });
-  };
-
-  {formImage.image && (
-    <div className="mb-4">
-      <label>Imagen de la Mascota:</label>
-      <img src={URL.createObjectURL(formImage.image)} alt="Imagen de la mascota" />
-    </div>
-  )};
 
   const [selectedValue, setSelectedValue] = useState(''); // Estado para almacenar el valor seleccionado
 
-
-  
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex items-center justify-center"></div>
@@ -78,7 +94,7 @@ function AppointmentForm() {
             type="text"
             id="name"
             name="name"
-            value={formData.name}
+            value={formDataAppointment.name}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
             required
@@ -93,7 +109,7 @@ function AppointmentForm() {
             type="text"
             id="lastname"
             name="lastname"
-            value={formData.lastname}
+            value={formDataAppointment.lastname}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
             required
@@ -113,7 +129,7 @@ function AppointmentForm() {
             type="text"
             id="email"
             name="email"
-            value={formData.email}
+            value={formDataAppointment.email}
             onChange={handleChange}
             className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
             required
@@ -127,7 +143,7 @@ function AppointmentForm() {
             type="date"
             id="date"
             name="date"
-            value={formData.date}
+            value={formDataAppointment.date}
             onChange={handleChange}
             className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
             required
@@ -141,7 +157,7 @@ function AppointmentForm() {
             type="time"
             id="time"
             name="time"
-            value={formData.time}
+            value={formDataAppointment.time}
             onChange={handleChange}
             className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
             required
@@ -157,7 +173,7 @@ function AppointmentForm() {
           <textarea
             id="reason"
             name="reason"
-            value={formData.reason}
+            value={formDataAppointment.reason}
             onChange={handleChange}
             rows= {3}
             className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
