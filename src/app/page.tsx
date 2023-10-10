@@ -2,7 +2,7 @@
 import { User, browserLocalPersistence, onAuthStateChanged, setPersistence } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { auth } from './firebase';
-import Link from 'next/dist/client/link';
+import SubMenu from '../app/components/submenu';
 
 export default function Home() {
   const [mascotas, setMascotas] = useState([]);
@@ -41,7 +41,6 @@ export default function Home() {
      userData = data;
      const isAdminUser = data?.role === 'admin';
      setIsAdmin(isAdminUser);
-     console.log('informacion de usuario app ', data)
    }) 
    .catch((error) => console.error('Error al obtener la lista de mascotas', error));
   }
@@ -64,19 +63,7 @@ export default function Home() {
   return (
     <main className="flex   flex-col items-center justify-between" >
       {isAdmin && (
-        <div className="mb-12 flex flex-row items-end bg-black"> {/* Contenedor flex */}
-          <ul className="flex space-x-4  "> {/* Contenedor flex */}
-            <li className="h-12 bg-black ">
-              <Link className="text-white" href="/pet">Crear mascota</Link>
-            </li>
-            <li className="h-12 bg-black ">
-              <Link className="text-white" href="/pets">Lista Mascota</Link>
-            </li>
-            <li className="h-12 bg-black ">
-              <Link className="text-white" href="/pet">Agendamiento</Link>
-            </li>
-          </ul>
-        </div>
+        <SubMenu></SubMenu>
       )}
       {!isAdmin && (
         <div className="bg-gray-100 h-12">
