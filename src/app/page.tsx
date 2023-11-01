@@ -2,18 +2,20 @@
 import { User, browserLocalPersistence, onAuthStateChanged, setPersistence } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { auth } from './firebase';
-import SubMenu from '../app/components/submenu';
+import SubMenu from '../app/components/subMenu';
+import Slider from './components/slider';
 
 export default function Home() {
   const [mascotas, setMascotas] = useState([]);
   const [user, setUser] = useState<User | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false); 
+  const [isAdmin, setIsAdmin] = useState(false);
+  const images = ['slider.jpg', 'slider2.jpg', 'slider.jpg'];
 
   let token;
   let userData;
 
-   // Esta función se ejecutará cuando se inicie sesión o al cargar la página
-   const handleAuthStateChanged = async () => {
+  // Esta función se ejecutará cuando se inicie sesión o al cargar la página
+  const handleAuthStateChanged = async () => {
     try {
       // Establece la persistencia en local para mantener la sesión activa
       await setPersistence(auth, browserLocalPersistence);
@@ -30,19 +32,19 @@ export default function Home() {
 
   const getUserData = async (token?: string) => {
 
-      // Realiza una solicitud GET a la API para obtener la lista de mascotas
+    // Realiza una solicitud GET a la API para obtener la lista de mascotas
     fetch('http://localhost:3000/autenticacion', {
-    headers: {
-      'Authorization': `Bearer ${token}`, // Agrega el encabezado Bearer con el token
-     },
-   })
-   .then((response) => response.json())
-   .then((data) => {
-     userData = data;
-     const isAdminUser = data?.role === 'admin';
-     setIsAdmin(isAdminUser);
-   }) 
-   .catch((error) => console.error('Error al obtener la lista de mascotas', error));
+      headers: {
+        'Authorization': `Bearer ${token}`, // Agrega el encabezado Bearer con el token
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        userData = data;
+        const isAdminUser = data?.role === 'admin';
+        setIsAdmin(isAdminUser);
+      })
+      .catch((error) => console.error('Error al obtener la lista de mascotas', error));
   }
 
   useEffect(() => {
@@ -56,7 +58,13 @@ export default function Home() {
     // Realiza una solicitud GET a la API para obtener la lista de mascotas
     fetch('http://localhost:3000/pet')
       .then((response) => response.json())
-      .then((data) => setMascotas(data))
+      .then((data) => {
+        console.log('mascotas', data)
+        data.forEach((element: any) => {
+          element.diseases = JSON.parse(element.diseases);
+        });
+        setMascotas(data)
+      })
       .catch((error) => console.error('Error al obtener la lista de mascotas', error));
   }, []);
 
@@ -70,10 +78,14 @@ export default function Home() {
 
         </div>
       )}
+      <Slider images={images} />
+
+      <h1 className="text-2xl font-semibold mb-4">Algunas de nuestras Mascotas</h1>
       <div className="container mx-auto grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      <link rel="icon" href="/images/logoRiopet.ico" />
+
         {/* Mapea las mascotas y crea una card para cada una */}
         {mascotas.map((mascota: any) => (
+
           <div
             key={mascota.id} // Asegúrate de usar un valor único como clave
             className="bg-red-700 rounded-lg shadow-md p-6 hover:shadow-lg transition-transform hover:scale-105"
@@ -91,7 +103,7 @@ export default function Home() {
             <p className="text-sm text-gray-500">Tamaño: {mascota.size}</p>
             <p className="text-sm text-gray-500">Estado: {mascota.estate}</p>
             <p className="text-sm text-gray-500">
-              Enfermedades: {mascota.diseases}
+              Enfermedades: {mascota.diseases.map((disease: any) => disease.value).join(', ')}
             </p>
             <p className="text-sm text-gray-500">Esterilizado: {mascota.sterilized}</p>
           </div>

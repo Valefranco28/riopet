@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ModalDelete = ({ isOpen, onClose, onDelete }) => {
+const ModalDelete = ({ isOpen, onClose, onDelete } : { isOpen: boolean, onClose: () => void, onDelete: () => void })  => {
     if (!isOpen) return null;
   
     return (
