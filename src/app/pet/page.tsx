@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import Select from 'react-select';
+import SubMenu from '../components/submenu';
 
 export interface disease {
   label: string,
@@ -19,11 +20,11 @@ function PetForm() {
   let petUpdateObject = window.sessionStorage.getItem('pet');
   window.sessionStorage.setItem('pet', JSON.stringify(null));
   let newUpdateObject;
-  let file: any;
-
   if (petUpdateObject) {
     newUpdateObject = JSON.parse(petUpdateObject);
   }
+  let file = newUpdateObject?.image;
+
 
   console.log('type', type)
 
@@ -41,6 +42,7 @@ function PetForm() {
     monthyear: newUpdateObject?.monthyear || '',
     date: newUpdateObject?.date || '',
     doc: newUpdateObject?.doc || '',
+    imagePreview: newUpdateObject?.image || null,
   });
   
 
@@ -66,12 +68,33 @@ function PetForm() {
 
     if(type){
       try {
+        const diseasesJson = JSON.stringify(formDataPet.diseases);
+        const formData = new FormData();
+        formData.append('name', formDataPet.name);
+        formData.append('species', formDataPet.species);
+        formData.append('age', formDataPet.age);
+        formData.append('color', formDataPet.color);
+        formData.append('gender', formDataPet.gender);
+        formData.append('size', formDataPet.size);
+        formData.append('estate', formDataPet.estate);
+        formData.append('diseases', diseasesJson);
+        formData.append('sterilized', formDataPet.sterilized);
+        formData.append('image', formDataPet.image);
+        formData.append('monthyear', formDataPet.monthyear);
+        formData.append('date', formDataPet.date);
+        formData.append('doc', formDataPet.doc);
+        if(file ===  undefined){
+          formData.append('imageBinary', '');
+        } else{
+          formData.append('imageBinary', file);
+        }
+
         const response = await fetch('http://localhost:3000/pet', {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`,
         },
-        body: JSON.stringify(formDataPet),
+         body: formData,
       });
       console.log('se guardo mascota correctamente', response)
     } catch (error) {
@@ -107,8 +130,10 @@ function PetForm() {
         body: formData,
       });
       console.log('se guardo mascota correctamente', response)
+      
     } catch (error) {
         console.error('error guardando mascota', error)
+
     }
     }
      
@@ -117,21 +142,15 @@ function PetForm() {
 
 
   const handleImageChange = (e: any) => {
-    file = e.target.files[0]; // Obtén el archivo seleccionado (puedes permitir múltiples archivos si es necesario)
-    console.log('image 1', file)
+    const file = e.target.files[0];
+    const imageUrl = URL.createObjectURL(file);
     setFormData({
       ...formDataPet,
-      image: file, // Almacena el archivo en el estado del formulario
+      image: file, // Actualizar la imagen en el estado
+      imagePreview: imageUrl, // Actualizar la imagen de vista previa
     });
     setFormData((prevData) => ({ ...prevData, image: file }));
   };
-
-  //{formDataPet.image && (
-  //  <div className="mb-4">
-  //   <label>Imagen de la Mascota:</label>
-  //   <img src={URL.createObjectURL(formDataPet.image)} alt="Imagen de la mascota" />
-  //  </div>
-  //)};
 
   const [selectedValue, setSelectedValue] = useState(''); // Estado para almacenar el valor seleccionado
 
@@ -144,19 +163,7 @@ function PetForm() {
     
     <div className="min-h-screen flex flex-col items-center  bg-gray-100">
     
-    <div className="mb-12 flex flex-row items-end bg-black"> {/* Contenedor flex */}
-          <ul className="flex space-x-4  "> {/* Contenedor flex */}
-            <li className="h-12 bg-black ">
-              <Link className="text-white" href="/pet">Crear mascota</Link>
-            </li>
-            <li className="h-12 bg-black ">
-              <Link className="text-white" href="/pets">Lista Mascota</Link>
-            </li>
-            <li className="h-12 bg-black ">
-              <Link className="text-white" href="/pet">Agendamiento</Link>
-            </li>
-          </ul>
-        </div>
+    <SubMenu></SubMenu>
     <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       
       <h2 className="text-2xl font-bold mb-4 text-center">Datos de la Mascota</h2>
@@ -175,6 +182,21 @@ function PetForm() {
          className="w-50 px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
          required
         />
+        {formDataPet.imagePreview && (
+            <div className="mt-2">
+              <label>Imagen existente:</label>
+              <img src={formDataPet.imagePreview} alt="Imagen existente" className="w-32 h-32 rounded-lg mt-2" />
+              {/* Agregar un botón o enlace para eliminar la imagen existente si es necesario */}
+              <button
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded mt-2"
+                onClick={() => {
+                  setFormData({ ...formDataPet, image: null, imagePreview: null });
+                }}
+              >
+                Eliminar imagen
+              </button>
+            </div>
+          )}
       </div>
       <div className="w-custom">
       <label htmlFor="name" className="block text-gray-700 font-bold mb-2">
