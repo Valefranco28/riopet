@@ -4,7 +4,7 @@ import ModalDelete from '../components/modal';
 import { useRouter } from 'next/navigation';
 
 const MascotasPage = () => {
-  const idToken =  window.sessionStorage.getItem('idToken');
+  let idToken: any;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mascotas, setMascotas] = useState([]);
   const [page, setPage] = useState('1'); // Current page
@@ -15,7 +15,7 @@ const MascotasPage = () => {
   
 
   useEffect(() => {
-
+    idToken =  window.sessionStorage.getItem('idToken');
     const url = new URL('http://localhost:3000/pet');
     url.searchParams.append('page', page); // Send as string
     url.searchParams.append('pageSize', pageSize); // Send as string

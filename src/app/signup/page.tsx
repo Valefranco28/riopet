@@ -35,14 +35,14 @@ function SignupForm() {
 
       if (response.ok) {
         // El registro fue exitoso
-        setSubmitStatus('Registro exitoso');
+        //setSubmitStatus('Registro exitoso');
       } else {
         // El registro falló
-        setSubmitStatus('Error en el registro');
+        //setSubmitStatus('Error en el registro');
       }
     } catch (error) {
       console.error('Error en la solicitud:', error);
-      setSubmitStatus('Error en la solicitud');
+      //setSubmitStatus('Error en la solicitud');
     }
   };
 

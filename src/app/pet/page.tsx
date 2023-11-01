@@ -1,10 +1,10 @@
 'use client'
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import Select from 'react-select';
-import SubMenu from '../components/submenu';
+import SubMenu from '../components/subMenu';
 
 export interface disease {
   label: string,
@@ -13,12 +13,18 @@ export interface disease {
 
 
 function PetForm() {
+ let idToken: any;
+ let type: any;
+ let params = useSearchParams();
+ let petUpdateObject: any;
 
-  const idToken =  window.sessionStorage.getItem('idToken');
-  let params = useSearchParams();
-  const type = params.get('type');
-  let petUpdateObject = window.sessionStorage.getItem('pet');
+
+  useEffect(() => {
+  type = params.get('type');
+  petUpdateObject =  window.sessionStorage.getItem('pet');
   window.sessionStorage.setItem('pet', JSON.stringify(null));
+  }, []);
+
   let newUpdateObject;
   if (petUpdateObject) {
     newUpdateObject = JSON.parse(petUpdateObject);
@@ -63,7 +69,7 @@ function PetForm() {
   };
   
   const handleSubmit = async (e: any) => {
-   
+    idToken = window.sessionStorage.getItem('idToken'); 
     e.preventDefault();
 
     if(type){
