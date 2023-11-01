@@ -3,12 +3,15 @@ import { User, browserLocalPersistence, onAuthStateChanged, setPersistence } fro
 import { useEffect, useState } from 'react';
 import { auth } from './firebase';
 import SubMenu from './components/subMenu';
-
+import ImageSlider from './components/imageSlider';
 
 export default function Home() {
   const [mascotas, setMascotas] = useState([]);
   const [user, setUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState(false); 
+  const [error, setError] = useState(null);
+  const [confirmation, setConfirmation] = useState(null);
+  
 
   let token;
   let userData;
@@ -61,6 +64,7 @@ export default function Home() {
       .catch((error) => console.error('Error al obtener la lista de mascotas', error));
   }, []);
 
+  
   return (
     <main className="flex   flex-col items-center justify-between" >
       {isAdmin && (
@@ -71,8 +75,8 @@ export default function Home() {
 
         </div>
       )}
+      <ImageSlider  />
       <div className="container mx-auto grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      <link rel="icon" href="/images/logoRiopet.ico" />
         {/* Mapea las mascotas y crea una card para cada una */}
         {mascotas.map((mascota: any) => (
           <div

@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react';
-import ModalDelete from '../components/modal';
+import ModalDelete from '../components/modalDelete';
 import { useRouter } from 'next/navigation';
 
 const MascotasPage = () => {

@@ -12,7 +12,7 @@ const SubMenu = () => {
             <Link className="text-white" href="/pets">Lista Mascota</Link>
           </li>
           <li className="h-12 bg-black ">
-            <Link className="text-white" href="/pet">Agendamiento</Link>
+            <Link className="text-white" href="/appointments">Agendamiento</Link>
           </li>
         </ul>
       </div>

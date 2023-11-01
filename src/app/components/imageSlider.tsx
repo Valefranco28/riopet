@@ -1,45 +1,40 @@
-import React from 'react';
-import Slider from 'react-slick';
+import React, { useState, useEffect } from 'react';
 
-// Importa los estilos de slick-carousel (asegúrate de agregar los estilos CSS necesarios)
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+const images = [
+  'slider.jpg',
+  'slider2.jpg',
+  'ceiba.jpg',
+  'ceiba2.png',
+  // Agrega más imágenes aquí
+];
 
-export default function CardSlider({ mascotas }) {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3, // Número de tarjetas que se muestran a la vez
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
+const ImageSlider = () => {
+  const [currentImage, setCurrentImage] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prevImage) => (prevImage + 1) % images.length);
+    }, 3000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
-    <Slider {...settings}>
-      {mascotas.map((mascota) => (
-        <div key={mascota.id} className="border rounded-lg p-4 hover:shadow-lg transition-transform hover:scale-105">
-          {/* Contenido de tu tarjeta */}
+    <div className="w-90 mx-auto overflow-hidden" style={{ paddingBottom: '10%', paddingLeft: '7%', paddingRight: '3%', height: '1000px' }}>
+      {images.map((image, index) => (
+        <div
+          key={index}
+          className={`absolute top-0 left-0 w-full h-full transition-opacity duration-500 ${
+            index === currentImage ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <img src={`/images/${image}`} alt={`Image ${index}`} className="w-full h-full" />
         </div>
       ))}
-    </Slider>
+    </div>
   );
-}
+};
 
-
-
+export default ImageSlider;

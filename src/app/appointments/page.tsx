@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react';
-import ModalDelete from '../components/modal';
+import ModalDelete from '../components/modalDelete';
 import { useRouter } from 'next/navigation';
 
 const AgendaPage = () => {
@@ -113,15 +113,6 @@ const AgendaPage = () => {
                     onClose={() => setIsModalOpen(false)}
                     onDelete={handleDelete}
                  />
-              </td>
-              <td>
-                {/* Botón para editar */}
-                <button
-                  onClick={() => handleEdit(agenda)}
-                  className="bg-blue-500 text-white px-2 py-1 rounded cursor-pointer"
-                >
-                  Editar
-                </button>
               </td>
             </tr>
           ))}

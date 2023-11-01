@@ -4,7 +4,10 @@ import { useSearchParams } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import Select from 'react-select';
-import SubMenu from '../components/submenu';
+import SubMenu from '../components/subMenu';
+import Modal from '../components/modal';
+
+
 
 export interface disease {
   label: string,
@@ -14,6 +17,8 @@ export interface disease {
 
 function PetForm() {
 
+
+  
   const idToken =  window.sessionStorage.getItem('idToken');
   let params = useSearchParams();
   const type = params.get('type');
@@ -61,6 +66,9 @@ function PetForm() {
     }));
     setFormData({ ...formDataPet, diseases: selectedDiseases });
   };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
   
   const handleSubmit = async (e: any) => {
    
@@ -96,9 +104,12 @@ function PetForm() {
         },
          body: formData,
       });
-      console.log('se guardo mascota correctamente', response)
+      setModalMessage('La mascota se guardo correctamente.');
+      setIsModalOpen(true);
     } catch (error) {
-        console.error('error guardando mascota', error)
+      console.error('Error al guardar la mascota', error);
+      setModalMessage('Hubo un error al guardar la mascota.');
+      setIsModalOpen(true);
     }
     } else {
     // Aquí puedes enviar los datos del formulario, incluida la imagen, a tu servidor o hacer el procesamiento necesario
@@ -129,18 +140,17 @@ function PetForm() {
         },
         body: formData,
       });
-      console.log('se guardo mascota correctamente', response)
-      
+      setModalMessage('La mascota se guardo correctamente.');
+      setIsModalOpen(true);
     } catch (error) {
-        console.error('error guardando mascota', error)
-
+      console.error('Error al guardar la mascota', error);
+      setModalMessage('Hubo un error al guardar la mascota.');
+      setIsModalOpen(true);
     }
     }
      
   };
   
-
-
   const handleImageChange = (e: any) => {
     const file = e.target.files[0];
     const imageUrl = URL.createObjectURL(file);
@@ -155,14 +165,34 @@ function PetForm() {
   const [selectedValue, setSelectedValue] = useState(''); // Estado para almacenar el valor seleccionado
 
   const handleAgeChange = (e: any) => {
-    setSelectedValue(e.target.value); // Actualiza el estado con el valor seleccionado
-  };
+    const { name, value, type, checked } = e.target;
 
+  if (name === 'age') {
+    const ageValue = parseInt(value, 10);
+    if (!isNaN(ageValue) && ageValue >= 1) {
+      setFormData({
+        ...formDataPet,
+        [name]: ageValue,
+      });
+    } else {
+      // Puedes mostrar un mensaje de error o realizar alguna acción en caso de entrada inválida.
+      // Aquí, solo lo dejaré en blanco.
+      setFormData({
+        ...formDataPet,
+        [name]: '', // Otra opción: Puedes mantener el valor actual si prefieres.
+      });
+    }
+  } else {
+    setFormData({
+      ...formDataPet,
+      [name]: type === 'checkbox' ? checked : value,
+    });
+  }
+  };
   
   return (
     
     <div className="min-h-screen flex flex-col items-center  bg-gray-100">
-    
     <SubMenu></SubMenu>
     <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       
@@ -418,6 +448,7 @@ function PetForm() {
       Guardar
     </button>
   </div>
+  <Modal show={isModalOpen} message={modalMessage} onClose={() => setIsModalOpen(false)} />
      </form>
     </div>
       

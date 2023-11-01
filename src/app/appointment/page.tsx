@@ -2,6 +2,7 @@
 import { useSearchParams } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
+import Modal from '../components/modal';
 
 
 function AppointmentForm() {
@@ -37,6 +38,9 @@ function AppointmentForm() {
     });
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+
   const handleSubmit = async (e: any) => {
    
     e.preventDefault();
@@ -50,9 +54,12 @@ function AppointmentForm() {
         },
         body: JSON.stringify(formDataAppointment),
       });
-      console.log('se guardo cita correctamente', response)
+      setModalMessage('La cita se agendó correctamente.');
+      setIsModalOpen(true);
     } catch (error) {
-        console.error('error guardando cita', error)
+      console.error('Error al agendar la cita', error);
+      setModalMessage('Hubo un error al agendar la cita.');
+      setIsModalOpen(true);
     }
     } else {
     // Aquí puedes enviar los datos del formulario, incluida la imagen, a tu servidor o hacer el procesamiento necesario
@@ -68,9 +75,12 @@ function AppointmentForm() {
         },
         body: JSON.stringify(formDataAppointment),
       });
-      console.log('se guardo cita correctamente', response)
+      setModalMessage('La cita se agendó correctamente.');
+      setIsModalOpen(true);
     } catch (error) {
-        console.error('error guardando cita', error)
+      console.error('Error al agendar la cita', error);
+      setModalMessage('Hubo un error al agendar la cita.');
+      setIsModalOpen(true);
     }
     }
      
@@ -78,6 +88,7 @@ function AppointmentForm() {
   
 
   const [selectedValue, setSelectedValue] = useState(''); // Estado para almacenar el valor seleccionado
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -192,6 +203,7 @@ function AppointmentForm() {
           Agendar
         </button>
       </div>
+      <Modal show={isModalOpen} message={modalMessage} onClose={() => setIsModalOpen(false)} />
      </form>
     </div>
       

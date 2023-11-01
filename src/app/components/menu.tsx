@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { auth } from '../firebase';
 
 interface FirebaseUser {
+  role: string;
   email: string;
 }
 
@@ -34,6 +35,8 @@ const Menu = () => {
     auth.signOut();
   };
 
+  
+
 
   return (
     <nav className="bg-black p-4">
@@ -56,11 +59,12 @@ const Menu = () => {
               Acerca de
             </Link>
           </li>
-          <li>
-            <Link href="/appointment" >
-              Agendar
-            </Link>
-          </li>
+           {user && user.role !== 'admin' && (
+            // Si el usuario ha iniciado sesión y no es un administrador, muestra la opción "Agendar"
+             <li>
+            <Link href="/appointment">Agendar</Link>
+            </li>
+            )}
           {user ? (
             // Si el usuario ha iniciado sesión, muestra "Cerrar Sesión"
             <li>
